@@ -1,4 +1,3 @@
-import path from 'path';
 import Paths from './backend/Paths.js';
 import IntroState from './states/IntroState.js';
 
