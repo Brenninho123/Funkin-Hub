@@ -1,10 +1,11 @@
-import fs from 'fs';
 import path from 'path';
+import Paths from './backend/Paths.js';
 
 class FunkinHub {
   constructor() {
     this.version = '1.0.0';
     this.config = {};
+    this.paths = Paths;
     this.isInitialized = false;
   }
 
@@ -19,12 +20,20 @@ class FunkinHub {
   }
 
   async loadConfig() {
-    const configPath = path.resolve(process.cwd(), 'config.json');
+    const configPath = this.paths.getDataPath('config.json');
     
-    if (fs.existsSync(configPath)) {
-      const rawData = fs.readFileSync(configPath, 'utf-8');
-      this.config = JSON.parse(rawData);
-    } else {
+    try {
+      const response = await fetch(configPath);
+      if (response.ok) {
+        this.config = await response.json();
+      } else {
+        this.config = {
+          theme: 'dark',
+          debug: true,
+          defaultEngine: 'PsychEngine'
+        };
+      }
+    } catch (error) {
       this.config = {
         theme: 'dark',
         debug: true,
@@ -34,19 +43,20 @@ class FunkinHub {
   }
 
   async setupAssets() {
-    const directories = ['./assets', './mods', './data'];
-    
-    directories.forEach((dir) => {
-      const dirPath = path.resolve(process.cwd(), dir);
-      if (!fs.existsSync(dirPath)) {
-        fs.mkdirSync(dirPath, { recursive: true });
-      }
-    });
+    const rootContainer = document.getElementById('app');
+    if (rootContainer) {
+      rootContainer.dataset.assetsLoaded = 'true';
+    }
   }
 
   run() {
     if (!this.isInitialized) {
       return;
+    }
+
+    const appElement = document.getElementById('app');
+    if (appElement) {
+      appElement.innerHTML = `<h1>Funkin' Hub v${this.version}</h1>`;
     }
   }
 }
