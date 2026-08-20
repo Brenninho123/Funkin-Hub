@@ -1,3 +1,6 @@
+import Input from '../ui/Input.js';
+import IntroState from './IntroState.js';
+
 class MainMenuState {
   constructor(game) {
     this.game = game;
@@ -35,21 +38,19 @@ class MainMenuState {
     if (app) {
       app.appendChild(this.container);
     }
-
-    window.addEventListener('keydown', this.handleKeyDown);
   }
 
-  handleKeyDown = (event) => {
-    if (event.key === 'ArrowUp') {
+  update() {
+    if (Input.isJustPressed('ArrowUp') || Input.isJustPressed('KeyW')) {
       this.changeSelection(-1);
-    } else if (event.key === 'ArrowDown') {
+    } else if (Input.isJustPressed('ArrowDown') || Input.isJustPressed('KeyS')) {
       this.changeSelection(1);
-    } else if (event.key === 'Enter') {
+    } else if (Input.isJustPressed('Enter') || Input.isJustPressed('Space')) {
       this.selectOption();
-    } else if (event.key === 'Escape' || event.key === 'Backspace') {
-      this.game.switchState(new (require('./IntroState.js').default)(this.game));
+    } else if (Input.isJustPressed('Escape') || Input.isJustPressed('Backspace')) {
+      this.game.switchState(new IntroState(this.game));
     }
-  };
+  }
 
   changeSelection(direction) {
     this.optionElements[this.selectedIndex].classList.remove('selected');
@@ -78,10 +79,7 @@ class MainMenuState {
     }
   }
 
-  update() {}
-
   destroy() {
-    window.removeEventListener('keydown', this.handleKeyDown);
     if (this.container && this.container.parentNode) {
       this.container.parentNode.removeChild(this.container);
     }
