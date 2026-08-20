@@ -1,4 +1,4 @@
-name: Build Windows App
+name: Build Windows App (.exe)
 
 on:
   push:
@@ -28,14 +28,13 @@ jobs:
             npm install
           }
 
-      - name: Build project
-        run: npm run build --if-present
+      - name: Build Windows Executable (.exe)
+        run: npm run dist
 
-      - name: Upload Build Artifacts
+      - name: Upload Windows Executable Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: funkin-hub-windows
+          name: Funkin-Hub-Windows-Exe
           path: |
-            dist/
-            build/
-          if-no-files-found: ignore
+            dist/*.exe
+          if-no-files-found: error
