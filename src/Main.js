@@ -1,11 +1,13 @@
 import path from 'path';
 import Paths from './backend/Paths.js';
+import IntroState from './states/IntroState.js';
 
 class FunkinHub {
   constructor() {
     this.version = '1.0.0';
     this.config = {};
     this.paths = Paths;
+    this.currentState = null;
     this.isInitialized = false;
   }
 
@@ -49,15 +51,22 @@ class FunkinHub {
     }
   }
 
+  switchState(newState) {
+    if (this.currentState && typeof this.currentState.destroy === 'function') {
+      this.currentState.destroy();
+    }
+    this.currentState = newState;
+    if (this.currentState && typeof this.currentState.create === 'function') {
+      this.currentState.create();
+    }
+  }
+
   run() {
     if (!this.isInitialized) {
       return;
     }
 
-    const appElement = document.getElementById('app');
-    if (appElement) {
-      appElement.innerHTML = `<h1>Funkin' Hub v${this.version}</h1>`;
-    }
+    this.switchState(new IntroState(this));
   }
 }
 
