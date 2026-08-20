@@ -1,4 +1,6 @@
+import path from 'path';
 import Paths from './backend/Paths.js';
+import CodeManager from './backend/system/Code.js';
 import IntroState from './states/IntroState.js';
 
 class FunkinHub {
@@ -6,6 +8,7 @@ class FunkinHub {
     this.version = '1.0.0';
     this.config = {};
     this.paths = Paths;
+    this.codeManager = CodeManager;
     this.currentState = null;
     this.isInitialized = false;
   }
@@ -14,10 +17,15 @@ class FunkinHub {
     try {
       await this.loadConfig();
       await this.setupAssets();
+      this.initCodeSystem();
       this.isInitialized = true;
     } catch (error) {
       console.error(error);
     }
+  }
+
+  initCodeSystem() {
+    this.codeManager.clear();
   }
 
   async loadConfig() {
