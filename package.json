@@ -1,0 +1,19 @@
+{
+  "name": "funkin-hub",
+  "version": "1.0.0",
+  "description": "A JavaScript-based central hub and toolkit for Friday Night Funkin' modding.",
+  "main": "src/Main.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/Main.js",
+    "build": "echo \"No build step specified yet\" && exit 0"
+  },
+  "keywords": [
+    "fnf",
+    "friday-night-funkin",
+    "hub",
+    "javascript"
+  ],
+  "author": "Brenninho123",
+  "license": "MIT"
+}
