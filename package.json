@@ -7,9 +7,8 @@
   "scripts": {
     "start": "electron .",
     "dist": "electron-builder --win nsis --publish never",
-    "cap:init": "cap init \"Funkin Hub\" \"com.brenninho123.funkinhub\" --web-dir .",
-    "cap:add": "cap add android",
-    "cap:sync": "cap sync android",
+    "prepare:web": "rimraf www && mkdirwww && copyfiles -u 0 index.html src/**/* www",
+    "cap:sync": "npm run prepare:web && cap sync android",
     "build:android": "npm run cap:sync && cd android && gradlew assembleDebug"
   },
   "build": {
