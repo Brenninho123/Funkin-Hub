@@ -1,0 +1,6 @@
+{
+  "appId": "com.brenninho123.funkinhub",
+  "appName": "Funkin Hub",
+  "webDir": "www",
+  "bundledWebRuntime": false
+}
