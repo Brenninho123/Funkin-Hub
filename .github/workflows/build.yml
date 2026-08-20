@@ -1,4 +1,4 @@
-name: Build Windows App (.exe)
+name: Build App (Windows & Android)
 
 on:
   push:
@@ -37,4 +37,47 @@ jobs:
           name: Funkin-Hub-Windows-Exe
           path: |
             dist/*.exe
+          if-no-files-found: error
+
+  build-android:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Setup Java JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Initialize Capacitor Android if needed
+        run: |
+          npx cap init "Funkin Hub" "com.brenninho123.funkinhub" --web-dir . || true
+          npx cap add android || true
+          npx cap sync android
+
+      - name: Build Android APK
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug
+
+      - name: Upload Android APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Funkin-Hub-Android-APK
+          path: android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
